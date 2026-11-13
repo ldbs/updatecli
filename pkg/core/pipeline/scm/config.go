@@ -14,6 +14,7 @@ import (
 	"github.com/updatecli/updatecli/pkg/plugins/scms/bitbucket"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/git"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/gitea"
+	"github.com/updatecli/updatecli/pkg/plugins/scms/giteasearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/github"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/githubsearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/gitlab"
@@ -170,6 +171,7 @@ func GetScmMapping() map[string]interface{} {
 		stashIdentifier:             &stash.Spec{},
 		githubsearchIdentifier:      &githubsearch.Spec{},
 		gitlabsearchIdentifier:      &gitlabsearch.Spec{},
+		giteasearchIdentifier:       &giteasearch.Spec{},
 	}
 }
 

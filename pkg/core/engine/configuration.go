@@ -16,6 +16,8 @@ import (
 	"github.com/updatecli/updatecli/pkg/core/result"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/azuredevops"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/azuredevopssearch"
+	"github.com/updatecli/updatecli/pkg/plugins/scms/gitea"
+	"github.com/updatecli/updatecli/pkg/plugins/scms/giteasearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/github"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/githubsearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/gitlab"
@@ -62,6 +64,8 @@ func (e *Engine) detectManifests(i int) bool {
 }
 
 // LoadConfigurations loads every configuration files and initialize the pipelines
+//
+//nolint:funlen
 func (e *Engine) LoadConfigurations() error {
 	// Checked once here so that a bad command line value is reported once, instead of once
 	// for every manifest it is merged into.
@@ -186,6 +190,28 @@ func (e *Engine) LoadConfigurations() error {
 						}
 						for _, spec := range discoveredAzureDevOpsSCms[1:] {
 							log.Debugf("azuredevopssearch scm %q added new pipeline configuration for repository %s/%s", scmID, spec.Project, spec.Repository)
+						}
+
+					case giteasearch.Kind:
+
+						log.Debugf("Processing giteasearch scm %q for potential multiple repository discovery", scmID)
+
+						ctx := context.Background()
+						giteaSearchScms, err := giteasearch.New(scmConfig.Spec)
+						if err != nil {
+							return fmt.Errorf("unable to instantiate giteasearch scm %q: %w", scmID, err)
+						}
+						discoveredGiteaSCms, err := giteaSearchScms.ScmsGenerator(ctx)
+						if err != nil {
+							return fmt.Errorf("unable to generate scm specs for giteasearch scm %q: %w", scmID, err)
+						}
+
+						loadedConfigurations, err = expandSCMConfigurations(loadedConfigurations, j, scmID, gitea.Kind, discoveredGiteaSCms)
+						if err != nil {
+							return err
+						}
+						for _, spec := range discoveredGiteaSCms[1:] {
+							log.Debugf("giteasearch scm %q added new pipeline configuration for repository %s/%s", scmID, spec.Owner, spec.Repository)
 						}
 
 					case gitlabsearch.Kind:

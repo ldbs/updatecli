@@ -63,7 +63,7 @@ func PinScmDirectory(scmConfig scm.Config, baseDir string) scm.Config {
 // updateScmDirectory rewrites a relative, non empty scm "directory" with resolve.
 // It works on a copy of the spec map, which it then assigns to scmConfig.
 //
-// The scms discovered by githubsearch, gitlabsearch or azuredevopssearch hold a typed spec.
+// The scms discovered by search plugins hold a typed spec.
 // Config.Update turns it into a map through a YAML round trip before every resource runs,
 // so it is converted the same way here to resolve its directory like any other scm. A
 // typed spec is only replaced when its directory is rewritten.

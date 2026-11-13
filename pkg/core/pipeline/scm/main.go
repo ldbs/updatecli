@@ -11,6 +11,7 @@ import (
 	"github.com/updatecli/updatecli/pkg/plugins/scms/bitbucket"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/git"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/gitea"
+	"github.com/updatecli/updatecli/pkg/plugins/scms/giteasearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/github"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/githubsearch"
 	"github.com/updatecli/updatecli/pkg/plugins/scms/gitlab"
@@ -30,6 +31,7 @@ const (
 	githubsearchIdentifier      = "githubsearch"
 	azuredevopssearchIdentifier = "azuredevopssearch"
 	gitlabsearchIdentifier      = "gitlabsearch"
+	giteasearchIdentifier       = "giteasearch"
 )
 
 type Scm struct {
@@ -152,7 +154,7 @@ func (s *Scm) GenerateSCM() error {
 		}
 
 		s.Handler = g
-	case githubsearch.Kind, azuredevopssearch.Kind, gitlabsearch.Kind:
+	case githubsearch.Kind, azuredevopssearch.Kind, gitlabsearch.Kind, giteasearch.Kind:
 		// Search SCMs are expanded by the engine before pipeline initialization.
 	default:
 		return fmt.Errorf("scm of kind %q is not supported", s.Config.Kind)
